@@ -22,6 +22,8 @@
         <ResourceDictionary>
             <support:TaskGroupConverter x:Key="groupConverter" />
             <support:TaskGroupNameConverter x:Key="groupNameConverter" />
+            <support:BoolVisibilityConverter x:Key="boolVisibilityConverter" />
+            <support:TaskbarAlignmentConverter x:Key="taskbarAlignmentConverter" />
         </ResourceDictionary>
     </Window.Resources>
     <Border Name="bdrBackground">
@@ -245,7 +247,7 @@
                     </ContextMenu>
                 </StackPanel.ContextMenu>
                 <Border HorizontalAlignment="Center" Name="bdrTaskbar">
-                    <DockPanel>
+                    <DockPanel HorizontalAlignment="{Binding Source={x:Static settings:Settings.Instance}, Path=TaskbarAlignment, Converter={StaticResource taskbarAlignmentConverter}}">
                         <ToggleButton x:Name="btnDesktopOverlay" Click="btnDesktopOverlay_Click" DockPanel.Dock="Left"
                                       IsChecked="{Binding Path=IsOverlayOpen, Mode=OneWay}"
                                       ToolTip="{Binding Path=(l10n:DisplayString.sTaskbar_DesktopOverlayToolTip)}"
@@ -261,7 +263,8 @@
                                   Margin="0,0,5,0"
                                   Drop="quickLaunchList_Drop"
                                   DragEnter="quickLaunchList_DragEnter"
-                                  SizeChanged="quickLaunchList_SizeChanged">
+                                  SizeChanged="quickLaunchList_SizeChanged"
+                                  Visibility="{Binding Source={x:Static settings:Settings.Instance}, Path=TaskbarEnableQuicklaunch, Converter={StaticResource boolVisibilityConverter}}">
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal"

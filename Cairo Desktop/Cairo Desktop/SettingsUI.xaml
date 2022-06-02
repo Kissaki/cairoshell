@@ -6,6 +6,7 @@
         xmlns:l10n="clr-namespace:CairoDesktop.Localization;assembly=CairoDesktop.Localization"
         xmlns:helpers="clr-namespace:ManagedShell.Common.Helpers;assembly=ManagedShell.Common"
         xmlns:validator="clr-namespace:CairoDesktop.SupportingClasses"
+        xmlns:support="clr-namespace:CairoDesktop.SupportingClasses"
         Title="{Binding Path=(l10n:DisplayString.sCairoMenu_CairoSettings)}"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterScreen"
@@ -14,6 +15,7 @@
         WindowStyle="SingleBorderWindow"
         SourceInitialized="Window_SourceInitialized">
     <Window.Resources>
+        <support:TaskbarAlignmentConverter x:Key="taskbarAlignmentConverter" />
         <Style x:Key="CairoSettingsBarRestartStyle"
                TargetType="{x:Type TabItem}">
             <Setter Property="Foreground"
@@ -667,6 +669,57 @@
                                Style="{StaticResource SettingGroupHeader}" />
                     <StackPanel Orientation="Horizontal"
                                 Style="{StaticResource RadioGroup}">
+                        <TextBlock Text="{Binding Path=(l10n:DisplayString.sSettings_Taskbar_TaskbarPosition)}"
+                                   VerticalAlignment="Top"
+                                   Margin="5,3,5,4" />
+                        <StackPanel Orientation="Vertical">
+                            <RadioButton GroupName="rdoTaskbarPos"
+                                         Name="radTaskbarPos0"
+                                         Click="radTaskbarPos0_Click">
+                                <Label Content="{Binding Path=(l10n:DisplayString.sSettings_Taskbar_PositionBottom)}" />
+                            </RadioButton>
+                            <RadioButton GroupName="rdoTaskbarPos"
+                                         Name="radTaskbarPos1"
+                                         Click="radTaskbarPos1_Click">
+                                <Label Content="{Binding Path=(l10n:DisplayString.sSettings_Taskbar_PositionTop)}" />
+                            </RadioButton>
+                        </StackPanel>
+                    </StackPanel>
+                    <CheckBox IsChecked="{Binding Source={x:Static Settings:Settings.Instance}, Path=EnableTaskbarMultiMon, UpdateSourceTrigger=PropertyChanged}"
+                              Name="chkEnableTaskbarMultiMon">
+                        <Label Content="{Binding Path=(l10n:DisplayString.sSettings_Taskbar_EnableTaskbarMultiMon)}" />
+                    </CheckBox>
+                    <CheckBox IsChecked="{Binding Source={x:Static Settings:Settings.Instance}, Path=FullWidthTaskBar, UpdateSourceTrigger=PropertyChanged}"
+                              Name="chkFullWidthTaskBar">
+                        <Label Content="{Binding Path=(l10n:DisplayString.sSettings_Taskbar_FullWidthTaskBar)}" />
+                    </CheckBox>
+                    <CheckBox IsChecked="{Binding Source={x:Static Settings:Settings.Instance}, Path=TaskbarEnableQuicklaunch, UpdateSourceTrigger=PropertyChanged}">
+                        <Label Content="Show Quick Launch" />
+                    </CheckBox>
+                    <StackPanel Orientation="Horizontal" Style="{StaticResource RadioGroup}">
+                        <TextBlock Text="Alignment"
+                                   VerticalAlignment="Top"
+                                   Margin="5,3,5,4" />
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton GroupName="rdoTaskbarAlign"
+                                         IsChecked="{Binding Source={x:Static Settings:Settings.Instance}, Path=TaskbarAlignment, Converter={StaticResource taskbarAlignmentConverter}, ConverterParameter=0}"
+                                         >
+                                <Label Content="Left" />
+                            </RadioButton>
+                            <RadioButton GroupName="rdoTaskbarAlign"
+                                         IsChecked="{Binding Source={x:Static Settings:Settings.Instance}, Path=TaskbarAlignment, Converter={StaticResource taskbarAlignmentConverter}, ConverterParameter=1}">
+                                <Label Content="Center" />
+                            </RadioButton>
+                            <RadioButton GroupName="rdoTaskbarAlign"
+                                         IsChecked="{Binding Source={x:Static Settings:Settings.Instance}, Path=TaskbarAlignment, Converter={StaticResource taskbarAlignmentConverter}, ConverterParameter=2}">
+                                <Label Content="Right" />
+                            </RadioButton>
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock Text="{Binding Path=(l10n:DisplayString.sSettings_Appearance)}"
+                               Style="{StaticResource SettingGroupHeader}" />
+                    <StackPanel Orientation="Horizontal"
+                                Style="{StaticResource RadioGroup}">
                         <TextBlock Text="{Binding Path=(l10n:DisplayString.sSettings_IconSize)}"
                                    VerticalAlignment="Top"
                                    Margin="5,3,5,4" />
@@ -685,24 +738,6 @@
                                          Name="radTaskbarSize0"
                                          Click="radTaskbarSize0_Click">
                                 <Label Content="{Binding Path=(l10n:DisplayString.sSettings_IconSizeLarge)}" />
-                            </RadioButton>
-                        </StackPanel>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal"
-                                Style="{StaticResource RadioGroup}">
-                        <TextBlock Text="{Binding Path=(l10n:DisplayString.sSettings_Taskbar_TaskbarPosition)}"
-                                   VerticalAlignment="Top"
-                                   Margin="5,3,5,4" />
-                        <StackPanel Orientation="Vertical">
-                            <RadioButton GroupName="rdoTaskbarPos"
-                                         Name="radTaskbarPos0"
-                                         Click="radTaskbarPos0_Click">
-                                <Label Content="{Binding Path=(l10n:DisplayString.sSettings_Taskbar_PositionBottom)}" />
-                            </RadioButton>
-                            <RadioButton GroupName="rdoTaskbarPos"
-                                         Name="radTaskbarPos1"
-                                         Click="radTaskbarPos1_Click">
-                                <Label Content="{Binding Path=(l10n:DisplayString.sSettings_Taskbar_PositionTop)}" />
                             </RadioButton>
                         </StackPanel>
                     </StackPanel>
@@ -740,14 +775,6 @@
                     <CheckBox IsChecked="{Binding Source={x:Static Settings:Settings.Instance}, Path=EnableTaskbarThumbnails, UpdateSourceTrigger=PropertyChanged}"
                               Name="chkEnableTaskbarThumbnails">
                         <Label Content="{Binding Path=(l10n:DisplayString.sSettings_Taskbar_EnableThumbnails)}" />
-                    </CheckBox>
-                    <CheckBox IsChecked="{Binding Source={x:Static Settings:Settings.Instance}, Path=EnableTaskbarMultiMon, UpdateSourceTrigger=PropertyChanged}"
-                              Name="chkEnableTaskbarMultiMon">
-                        <Label Content="{Binding Path=(l10n:DisplayString.sSettings_Taskbar_EnableTaskbarMultiMon)}" />
-                    </CheckBox>
-                    <CheckBox IsChecked="{Binding Source={x:Static Settings:Settings.Instance}, Path=FullWidthTaskBar, UpdateSourceTrigger=PropertyChanged}"
-                              Name="chkFullWidthTaskBar">
-                        <Label Content="{Binding Path=(l10n:DisplayString.sSettings_Taskbar_FullWidthTaskBar)}" />
                     </CheckBox>
                     <TextBlock Text="{Binding Path=(l10n:DisplayString.sSettings_Behavior)}"
                                Style="{StaticResource SettingGroupHeader}" />

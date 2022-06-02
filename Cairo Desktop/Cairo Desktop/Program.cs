@@ -5,6 +5,7 @@ using CairoDesktop.Common.Logging;
 using CairoDesktop.Configuration;
 using CairoDesktop.Infrastructure.DependencyInjection;
 using CairoDesktop.Infrastructure.Options;
+using CairoDesktop.Interfaces;
 using CairoDesktop.MenuBarExtensions;
 using CairoDesktop.Services;
 using Microsoft.Extensions.Configuration;
@@ -12,19 +13,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 using System.IO;
-using CairoDesktop.Interfaces;
 
 namespace CairoDesktop
 {
     internal sealed class Program
     {
-        private const string MutexName = "CairoShell";
-        private const int MutexAttempts = 10;
-        private const int MutexWaitMs = 1000;
-
         private static IHost _host;
-        private static System.Threading.Mutex _cairoMutex;
 
         /// <summary>
         /// The main entry point for the application
@@ -32,8 +28,10 @@ namespace CairoDesktop
         [STAThread]
         public static int Main(string[] args)
         {
-            if (!SingleInstanceCheck())
+            var singleInstance = ProgramMutex.Aquire();
+            if (singleInstance == null)
             {
+                Debug.WriteLine("Failed to aquire program mutex. Exiting...");
                 return 1;
             }
 
@@ -102,32 +100,6 @@ namespace CairoDesktop
 
             var app = _host.Services.GetRequiredService<ICairoApplication>();
             return app.Run();
-        }
-
-        private static bool GetMutex()
-        {
-            _cairoMutex = new System.Threading.Mutex(true, MutexName, out bool ok);
-
-            return ok;
-        }
-
-        private static bool SingleInstanceCheck()
-        {
-            for (int i = 0; i < MutexAttempts; i++)
-            {
-                if (!GetMutex())
-                {
-                    // Dispose the mutex, otherwise it will never create new
-                    _cairoMutex.Dispose();
-                    System.Threading.Thread.Sleep(MutexWaitMs);
-                }
-                else
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }

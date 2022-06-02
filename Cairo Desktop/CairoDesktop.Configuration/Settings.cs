@@ -27,7 +27,7 @@ namespace CairoDesktop.Configuration
         {
             cairoSettings = Properties.Settings.Default;
             cairoSettings.PropertyChanged += CairoSettings_PropertyChanged;
-            
+
             UpgradeIfNecessary();
         }
 
@@ -542,6 +542,37 @@ namespace CairoDesktop.Configuration
                 }
             }
         }
+
+        public bool TaskbarEnableQuicklaunch
+        {
+            get
+            {
+                return cairoSettings.TaskbarEnableQuicklaunch;
+            }
+            set
+            {
+                if (cairoSettings.TaskbarEnableQuicklaunch != value)
+                {
+                    cairoSettings.TaskbarEnableQuicklaunch = value;
+                }
+            }
+        }
+
+        public int TaskbarAlignment
+        {
+            get
+            {
+                return cairoSettings.TaskbarAlignment;
+            }
+            set
+            {
+                if (cairoSettings.TaskbarAlignment != value)
+                {
+                    cairoSettings.TaskbarAlignment = value;
+                }
+            }
+        }
+
         #endregion
 
         #region Menu Bar
